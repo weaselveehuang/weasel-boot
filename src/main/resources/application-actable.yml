@@ -1,0 +1,7 @@
+actable:
+  table:
+    auto: update
+  model:
+    pack: com.weasel.modules.*.entity
+  database:
+    type: mysql

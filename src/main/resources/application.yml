@@ -1,0 +1,59 @@
+server:
+  port: 3000
+spring:
+  profiles:
+    active: dev
+  main:
+    banner-mode: off
+    allow-circular-references: true
+
+sa-token:
+  token-name: Authorization
+  is-print: false
+
+mybatis-plus:
+  global-config:
+    banner: false
+#  configuration:
+#    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
+easy-trans:
+  #启用redis缓存 如果不用redis请设置为false
+  is-enable-redis: true
+  #启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
+  is-enable-global: false
+  #启用平铺模式
+  is-enable-tile: true
+bean-searcher:
+  params:
+    pagination:
+      default-size: 10
+      page: page
+      size: size
+      start: 1
+
+yue:
+  web:
+    http-message-converter:
+      jackson:
+        write-null-boolean-as-false: false
+        enabled: false
+      fastjson:
+        enabled: true
+        serializer-features: browsercompatible
+
+dict-mapper:
+  # 如果需要扫描 @SpringBootApplication 范围外的包，就需要在这里设置
+  scan-packages: com.weasel.modules.*.enums
+  # 启用内建的API接口
+  enable-endpoint: true
+  # 字典接口URL
+  endpoint-base-url: /sys/immutable-dictionaries
+
+weasel:
+  exclude-path:
+    - /doc.html
+    - /login
+    - /error
+    - /logout
+    - /sys/dataSource/**
+    - /dbMetadata
