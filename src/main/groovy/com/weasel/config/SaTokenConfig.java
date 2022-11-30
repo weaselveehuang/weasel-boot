@@ -1,7 +1,6 @@
 package com.weasel.config;
 
-import cn.dev33.satoken.interceptor.SaAnnotationInterceptor;
-import cn.dev33.satoken.interceptor.SaRouteInterceptor;
+import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
@@ -27,11 +26,9 @@ public class SaTokenConfig implements WebMvcConfigurer {
     // 注册Sa-Token的注解拦截器，打开注解式鉴权功能
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 注册注解拦截器，并排除不需要注解鉴权的接口地址 (与登录拦截器无关)
-        registry.addInterceptor(new SaAnnotationInterceptor());
         // 注册Sa-Token的路由拦截器
-        registry.addInterceptor(new SaRouteInterceptor(
-                        (req, res, handler) -> {
+        registry.addInterceptor(new SaInterceptor(
+                        handle -> {
 //                    SaRouter.match("/getUserInfo", "/getMenuList", "/getPermCode")
 //                            .check(r -> StpUtil.checkLogin()).stop()
 //                    ;

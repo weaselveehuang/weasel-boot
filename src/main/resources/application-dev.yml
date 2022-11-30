@@ -7,7 +7,7 @@ spring:
       datasource:
         master:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/weasel8?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&tinyInt1isBit=false&autoReconnect=true&rewriteBatchedStatements=true
+          url: jdbc:mysql://127.0.0.1:3306/weasel?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&tinyInt1isBit=false&autoReconnect=true&rewriteBatchedStatements=true
           username: root
           password: root
         postgresql:
@@ -23,4 +23,4 @@ spring:
   redis:
     host: localhost
     database: 1
-    password:
+    password: 123456

@@ -31,6 +31,11 @@ import com.weasel.common.base.excel.form.ExportForm
 import com.weasel.common.consts.Consts
 import com.weasel.modules.sys.util.TreeUtil
 import groovy.util.logging.Slf4j
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiImplicitParam
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -45,9 +50,10 @@ import java.util.stream.Collectors
  * @date 2022/7/22 14:42
  * @version 1.0
  */
+@Api(tags = '数据操作')
 @Slf4j
 @RestController
-@RequestMapping
+@RequestMapping("/_d")
 class DynamicController {
     @Autowired
     Validator validator
@@ -55,21 +61,28 @@ class DynamicController {
     BeanSearcherProperties beanSearcherProperties
     @Autowired
     TransService transService
-//    def beanSearcherProperties = SpringUtil.getBean(BeanSearcherProperties)
-//    def transService = SpringUtil.getBean(TransService)
 
-    @GetMapping('/{moduleName}/{entityName}')
-    Result list(@PathVariable String moduleName, @PathVariable String entityName) {
+    /**
+     * Test @RequestParam
+     *
+     * @param moduleName 模块名
+     * @param entityName 实体名
+     */
+    @ApiOperation(value = '查询列表', notes = '根据筛选条件查询多条数据，支持分页')
+    @ApiImplicitParam(name = "moduleName")
+    @GetMapping(['/{moduleName}/{entityName}'])
+    Result list(@PathVariable @ApiParam('模块名') String moduleName, @PathVariable @ApiParam('业务名') String entityName) {
         def beanSearcher = SpringUtil.getBean(BeanSearcher)
         def entityType = getEntityType(moduleName, entityName)
         Map<String, Object> searchParams = buildSearchParams(entityType)
         BeanSearcherProperties.Params.Pagination pagination = beanSearcherProperties.getParams().getPagination()
 
         if (TreeEntity.isAssignableFrom(entityType)) {
-            def all = beanSearcher.searchAll(entityType, searchParams)
-            transService.transMore(all)
-            all = TreeUtil.build(all)
-            return R.success(all)
+            def all = beanSearcher.searchAll(entityType, null)
+            def query = beanSearcher.searchAll(entityType, searchParams)
+            transService.transMore(query)
+            query = TreeUtil.build(all, query)
+            return R.success(query)
         } else if (searchParams.containsKey(pagination.getPage()) && searchParams.containsKey(pagination.getSize())) {
             SearchResult page = beanSearcher.search(entityType, searchParams)
             transService.transMore(page.getDataList())
@@ -127,13 +140,13 @@ class DynamicController {
         // step1: beforeDelete
         controllerHandler && controllerHandler.beforeDelete(entity)
         // step2: delete
-        entityType.newInstance().deleteById(entity)
+        entity.deleteById()
         // step3: afterDelete
         controllerHandler && controllerHandler.afterDelete(entity)
         R.success()
     }
 
-    @DeleteMapping("/{moduleName}/{entityName}/batch")
+    @DeleteMapping('/{moduleName}/{entityName}/batch')
     Result removeBatch(@PathVariable String moduleName, @PathVariable String entityName, @RequestBody def entities) {
         def entityType = getEntityType(moduleName, entityName)
         entities = Convert.toList(entityType, entities)
@@ -148,7 +161,7 @@ class DynamicController {
         R.success()
     }
 
-    @PostMapping("/{moduleName}/{entityName}/export")
+    @PostMapping('/{moduleName}/{entityName}/export')
     void export(@PathVariable String moduleName, @PathVariable String entityName, ExportForm exportForm, HttpServletResponse response) {
         try {
 //            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
@@ -242,8 +255,8 @@ class DynamicController {
         }
     }
 
-    @PostMapping("/{moduleName}/{entityName}/import")
-    Result importData(@PathVariable String moduleName, @PathVariable String entityName, MultipartFile file) {
+    @PostMapping('/{moduleName}/{entityName}/import')
+    Result 'import'(@PathVariable String moduleName, @PathVariable String entityName, MultipartFile file) {
         def entityType = getEntityType(moduleName, entityName)
         EasyExcel.read(file.getInputStream(), entityType, new ReadListener<?>() {
             /**

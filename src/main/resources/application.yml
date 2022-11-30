@@ -4,8 +4,12 @@ spring:
   profiles:
     active: dev
   main:
-    banner-mode: off
+    banner-mode: console
     allow-circular-references: true
+  mvc:
+    # 解决springboot升级到2.6.0+之后，knife4j报错
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 sa-token:
   token-name: Authorization
@@ -52,8 +56,22 @@ dict-mapper:
 weasel:
   exclude-path:
     - /doc.html
+    - /webjars/**
+    - /*/api-docs
+    - /swagger-resources
+    - /favicon.ico
     - /login
     - /error
     - /logout
     - /sys/dataSource/**
     - /dbMetadata
+    - /sys/*
+
+mica:
+  swagger:
+    enabled: true
+knife4j:
+  setting:
+    swaggerModelName: 是否
+    enableOpenApi: true
+    enableSwaggerModels: true

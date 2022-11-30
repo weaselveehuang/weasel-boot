@@ -11,15 +11,20 @@ import com.tangzc.mpe.actable.annotation.Table;
 import com.weasel.common.base.BaseEntity;
 import com.weasel.common.base.TreeEntity;
 import com.weasel.modules.sys.enums.MenuType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@ApiModel("菜单")
 @Data
 @Table(value = "sys_menu", comment = "菜单表", excludeFields = {"serialVersionUID", "entityClass"})
 public class SysMenu extends TreeEntity<SysMenu> {
+    @ApiModelProperty(value = "权限标识")
     @Column(comment = "权限标识", length = 500)
     private String permission;
     @Column(comment = "类型: CATALOG 目录,MENU 菜单,BUTTON 按钮", notNull = true)

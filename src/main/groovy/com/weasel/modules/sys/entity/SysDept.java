@@ -17,12 +17,14 @@ import com.weasel.annotation.RefTable;
 import com.weasel.annotation.RefTables;
 import com.weasel.common.base.TreeEntity;
 import com.weasel.common.base.excel.convertor.BooleanStringConverter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+//@Schema(name = "部门")
 @Data
 @Table(value = "sys_dept", comment = "部门表", excludeFields = {"serialVersionUID", "entityClass"})
 @RefTables({@RefTable(entityClass = SysDept.class, selfColumn = "id", refColumn = "parent_id", erroMsg = "所选部门中已存在关联子部门，请先删除关联子部门！")

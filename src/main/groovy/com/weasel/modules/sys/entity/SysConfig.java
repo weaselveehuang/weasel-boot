@@ -19,14 +19,17 @@ import com.weasel.common.base.excel.convertor.BooleanStringConverter;
 import com.weasel.common.base.excel.convertor.EnumStringConverter;
 import com.weasel.common.consts.Consts;
 import com.weasel.modules.sys.enums.DataType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
+@ApiModel("配置")
 @Data
 @Table(value = "sys_config", comment = "配置表", excludeFields = {"serialVersionUID", "entityClass"})
 public class SysConfig extends BaseEntity<SysConfig> {
-
+    @ApiModelProperty(value = "名称")
     @ExcelProperty(value = "名称")
     @Column(comment = "名称", notNull = true)
     @Unique(columns = {"tenant_id", "deleted", "name"})
@@ -34,6 +37,7 @@ public class SysConfig extends BaseEntity<SysConfig> {
     @NotBlank(message = "名称不能为空!", groups = Consts.ValidateGroup.SAVE.class)
     @DbField(onlyOn = Contain.class)
     private String name;
+    @ApiModelProperty(value = "编码")
     @ExcelProperty(value = "编码")
     @Column(comment = "编码", notNull = true, length = 500)
     @Unique(columns = {"tenant_id", "deleted", "code"})

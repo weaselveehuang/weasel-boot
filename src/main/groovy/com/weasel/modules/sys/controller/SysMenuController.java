@@ -10,6 +10,8 @@ import com.weasel.modules.sys.entity.SysRoleMenu;
 import com.weasel.modules.sys.enums.MenuType;
 import com.weasel.modules.sys.util.MenuUtil;
 import groovy.util.logging.Slf4j;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  * @date 2022/3/24 17:35
  */
+//@Api(tags = "菜单管理")
 @RestController
 @RequestMapping("/sys/menu")
 @Slf4j
